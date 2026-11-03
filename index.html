@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Little Love Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@500;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     EDIT ME — everything you'd personalise per couple lives here
+     ============================================================ */
+  :root{
+    --author-name: "John";
+    --partner-name: "Sarah";
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  :root{
+    --cream: #faf5ec;
+    --paper: #fffdf8;
+    --wine: #6e1f2b;
+    --wine-deep: #4c141d;
+    --rose: #d98b96;
+    --gold: #c9a227;
+    --ink: #2b1b17;
+    --ink-soft: #6b5a52;
+    --line: rgba(43,27,23,0.14);
+  }
+
+  html,body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    overflow-x:hidden;
+    scroll-behavior:smooth;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.serif{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+
+  .hand{
+    font-family:'Caveat', cursive;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------- shell / progress ---------- */
+
+  #shell{
+    position:relative;
+    min-height:100vh;
+    width:100%;
+  }
+
+  #progress{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:3px;
+    background:var(--line);
+    z-index:50;
+  }
+  #progress-fill{
+    height:100%;
+    width:16.66%;
+    background:var(--wine);
+    transition:width 0.6s cubic-bezier(.65,0,.35,1);
+  }
+
+  .screen{
+    min-height:100vh;
+    width:100%;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:12vh 6vw 8vh;
+    position:relative;
+  }
+  .screen.active{
+    display:flex;
+  }
+  .screen.active .rise{
+    animation:rise 0.9s cubic-bezier(.16,1,.3,1) both;
+  }
+  .screen.active .rise:nth-child(1){ animation-delay:0.02s; }
+  .screen.active .rise:nth-child(2){ animation-delay:0.14s; }
+  .screen.active .rise:nth-child(3){ animation-delay:0.26s; }
+  .screen.active .rise:nth-child(4){ animation-delay:0.38s; }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .eyebrow{
+    display:inline-block;
+    font-family:'Caveat', cursive;
+    font-size:1.5rem;
+    color:var(--wine);
+    margin-bottom:0.6rem;
+  }
+
+  .lede{
+    max-width:36ch;
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    line-height:1.6;
+    margin-top:1rem;
+  }
+
+  .btn{
+    font-family:'Work Sans', sans-serif;
+    font-size:0.98rem;
+    font-weight:500;
+    letter-spacing:0.01em;
+    color:var(--paper);
+    background:var(--wine);
+    border:none;
+    padding:0.95rem 2.1rem;
+    border-radius:999px;
+    cursor:pointer;
+    margin-top:2.6rem;
+    transition:transform 0.25s ease, background 0.25s ease;
+    box-shadow:0 8px 24px -10px rgba(110,31,43,0.55);
+  }
+  .btn:hover{ background:var(--wine-deep); transform:translateY(-2px); }
+  .btn:active{ transform:translateY(0px) scale(0.98); }
+  .btn:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+  .btn.ghost{
+    background:transparent;
+    color:var(--wine);
+    border:1.5px solid var(--wine);
+    box-shadow:none;
+  }
+  .btn.ghost:hover{ background:var(--wine); color:var(--paper); }
+
+  .heart-mark{
+    width:26px; height:26px;
+    display:inline-block;
+  }
+
+  /* ---------- screen 1: hook ---------- */
+
+  #s1{ background:radial-gradient(120% 90% at 50% 0%, #fff 0%, var(--cream) 55%); }
+  .hook-title{
+    font-size:clamp(2.1rem, 7vw, 3.2rem);
+    line-height:1.15;
+    max-width:14ch;
+  }
+  .hook-sub{
+    font-family:'Caveat', cursive;
+    font-size:1.7rem;
+    color:var(--wine);
+    margin-top:0.3rem;
+  }
+
+  /* ---------- screen 2: question ---------- */
+
+  #s2{ background:var(--wine); color:var(--paper); }
+  #s2 .eyebrow{ color:var(--rose); }
+  #s2 h2{ color:var(--paper); font-size:clamp(1.7rem,5.5vw,2.5rem); max-width:18ch; line-height:1.25; }
+  .date-card{
+    margin-top:2.4rem;
+    background:rgba(255,253,248,0.08);
+    border:1px solid rgba(255,253,248,0.25);
+    border-radius:18px;
+    padding:1.6rem 2.2rem;
+    backdrop-filter:blur(2px);
+  }
+  .date-num{
+    font-family:'Fraunces', serif;
+    font-size:clamp(2.6rem,10vw,4rem);
+    line-height:1;
+    color:var(--gold);
+  }
+  .date-label{
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    color:rgba(255,253,248,0.75);
+    margin-top:0.4rem;
+  }
+  #s2 .btn{ background:var(--gold); color:var(--wine-deep); box-shadow:0 8px 24px -10px rgba(201,162,39,0.6); }
+  #s2 .btn:hover{ background:#e0b62c; }
+
+  /* ---------- screen 3: memories ---------- */
+
+  #s3{ padding-left:0; padding-right:0; }
+  .memories-head{ padding:0 6vw; }
+  .reel{
+    margin-top:2.6rem;
+    width:100%;
+    display:flex;
+    gap:1.4rem;
+    overflow-x:auto;
+    padding:1rem 8vw 1.6rem;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+  .reel::-webkit-scrollbar{ height:6px; }
+  .reel::-webkit-scrollbar-thumb{ background:var(--line); border-radius:6px; }
+
+  .polaroid{
+    flex:0 0 auto;
+    scroll-snap-align:center;
+    width:min(72vw, 280px);
+    background:var(--paper);
+    padding:0.9rem 0.9rem 1.3rem;
+    border-radius:4px;
+    box-shadow:0 14px 30px -14px rgba(43,27,23,0.35);
+    transform:rotate(var(--tilt, -2deg));
+  }
+  .polaroid:nth-child(2n){ --tilt: 2.2deg; }
+  .polaroid:nth-child(3n){ --tilt: -1.4deg; }
+
+  .polaroid-photo{
+    width:100%;
+    aspect-ratio:4/5;
+    border-radius:2px;
+    background:
+      linear-gradient(160deg, var(--photo-a) 0%, var(--photo-b) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.4rem;
+  }
+  .polaroid-cap{
+    font-family:'Caveat', cursive;
+    font-size:1.35rem;
+    color:var(--ink);
+    margin-top:0.7rem;
+    text-align:left;
+  }
+  .polaroid-tag{
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    text-align:left;
+    margin-top:0.15rem;
+  }
+
+  .reel-hint{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin-top:0.4rem;
+  }
+
+  /* ---------- screen 4: letter ---------- */
+
+  #s4{ background:var(--cream); }
+  .envelope-wrap{
+    position:relative;
+    width:min(84vw,320px);
+    margin-top:2.2rem;
+  }
+  .envelope{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/11;
+    background:var(--paper);
+    border-radius:8px;
+    box-shadow:0 20px 40px -18px rgba(43,27,23,0.4);
+    cursor:pointer;
+    overflow:visible;
+  }
+  .envelope-body{
+    position:absolute; inset:0;
+    background:var(--paper);
+    border-radius:8px;
+    border:1px solid var(--line);
+  }
+  .envelope-flap{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:58%;
+    background:var(--rose);
+    clip-path:polygon(0 0, 100% 0, 50% 78%);
+    border-radius:8px 8px 0 0;
+    transform-origin:top center;
+    transition:transform 0.7s cubic-bezier(.65,0,.35,1);
+    z-index:3;
+  }
+  .envelope.open .envelope-flap{
+    transform:rotateX(180deg);
+  }
+  .seal{
+    position:absolute;
+    top:38%; left:50%;
+    width:46px; height:46px;
+    background:var(--wine);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold);
+    font-family:'Fraunces', serif;
+    font-size:1.1rem;
+    z-index:4;
+    box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    transition:opacity 0.3s ease;
+  }
+  .envelope.open .seal{ opacity:0; }
+
+  .letter-paper{
+    position:absolute;
+    left:6%; right:6%;
+    bottom:6%;
+    top:20%;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:0 6px 18px rgba(43,27,23,0.12);
+    transform:translateY(6%);
+    transition:transform 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:1rem;
+  }
+  .envelope.open .letter-paper{
+    transform:translateY(-58%);
+  }
+  .letter-peek{
+    font-family:'Caveat', cursive;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+  }
+
+  .tap-hint{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin-top:1.2rem;
+  }
+
+  .full-letter{
+    max-width:38ch;
+    margin-top:2.6rem;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:2rem 1.8rem;
+    text-align:left;
+    box-shadow:0 14px 30px -18px rgba(43,27,23,0.3);
+    opacity:0;
+    max-height:0;
+    overflow:hidden;
+    transition:opacity 0.6s ease, max-height 0.8s ease;
+  }
+  .full-letter.show{
+    opacity:1;
+    max-height:800px;
+    margin-bottom:1rem;
+  }
+  .full-letter p{
+    font-family:'Caveat', cursive;
+    font-size:1.4rem;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .full-letter .sign{
+    margin-top:1.2rem;
+    font-family:'Caveat', cursive;
+    font-size:1.5rem;
+    color:var(--wine);
+  }
+
+  /* ---------- screen 5: reveal ---------- */
+
+  #s5{ background:var(--wine-deep); color:var(--paper); }
+  .reveal-eyebrow{ color:var(--rose); }
+  .reveal-title{
+    font-size:clamp(2.3rem,8vw,3.6rem);
+    color:var(--paper);
+    line-height:1.1;
+  }
+  .reveal-title .name{ color:var(--gold); font-style:italic; }
+  #s5 .lede{ color:rgba(255,253,248,0.78); }
+
+  /* ---------- screen 6: final ---------- */
+
+  #s6{ background:var(--cream); }
+  .note-strip{
+    margin-top:2rem;
+    width:min(90vw,360px);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:1.5rem;
+    box-shadow:0 14px 30px -18px rgba(43,27,23,0.3);
+  }
+  .note-strip .track{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    text-align:left;
+  }
+  .disc{
+    width:46px; height:46px;
+    border-radius:50%;
+    background:var(--wine);
+    position:relative;
+    flex:0 0 auto;
+  }
+  .disc::after{
+    content:"";
+    position:absolute;
+    inset:38%;
+    background:var(--cream);
+    border-radius:50%;
+  }
+  .track-meta .t1{ font-weight:500; font-size:0.95rem; }
+  .track-meta .t2{ font-size:0.8rem; color:var(--ink-soft); }
+
+  .final-mini{
+    margin-top:1.6rem;
+    display:flex;
+    gap:0.7rem;
+    justify-content:center;
+  }
+  .mini-photo{
+    width:56px; height:56px;
+    border-radius:50%;
+    border:2px solid var(--paper);
+    box-shadow:0 4px 10px rgba(43,27,23,0.2);
+    background:linear-gradient(160deg, var(--photo-a), var(--photo-b));
+  }
+
+  .made-with{
+    margin-top:3rem;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- nav dots ---------- */
+  #dots{
+    position:fixed;
+    right:16px; top:50%;
+    transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:8px;
+    z-index:40;
+  }
+  #dots button{
+    width:7px; height:7px;
+    border-radius:50%;
+    border:none;
+    background:var(--line);
+    cursor:pointer;
+    padding:0;
+    transition:background 0.3s ease, transform 0.3s ease;
+  }
+  #dots button.active{
+    background:var(--wine);
+    transform:scale(1.5);
+  }
+  #s2 ~ * #dots button.active, #s5 ~ * #dots button.active{}
+  @media (max-width:480px){ #dots{ right:10px; } }
+
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="progress-fill"></div></div>
+<div id="dots" aria-hidden="true">
+  <button data-goto="1" class="active" aria-label="Screen 1"></button>
+  <button data-goto="2" aria-label="Screen 2"></button>
+  <button data-goto="3" aria-label="Screen 3"></button>
+  <button data-goto="4" aria-label="Screen 4"></button>
+  <button data-goto="5" aria-label="Screen 5"></button>
+  <button data-goto="6" aria-label="Screen 6"></button>
+</div>
+
+<div id="shell">
+
+  <!-- SCREEN 1 — THE HOOK -->
+  <section class="screen active" id="s1">
+    <div class="eyebrow rise">Hey you&hellip;</div>
+    <h1 class="hook-title rise">I made something<br>just for us.</h1>
+    <div class="hook-sub rise">open when you're ready</div>
+    <button class="btn rise" data-next>Open your surprise →</button>
+  </section>
+
+  <!-- SCREEN 2 — THE QUESTION -->
+  <section class="screen" id="s2">
+    <div class="eyebrow rise">a question first</div>
+    <h2 class="rise">Do you remember the day our story began?</h2>
+    <div class="date-card rise">
+      <div class="date-num" id="days-count">0</div>
+      <div class="date-label">days of choosing you, one at a time</div>
+    </div>
+    <button class="btn rise" data-next>I remember ❤️</button>
+  </section>
+
+  <!-- SCREEN 3 — MEMORIES -->
+  <section class="screen" id="s3">
+    <div class="memories-head">
+      <div class="eyebrow rise">a few favourites</div>
+      <h2 class="rise">The moments that made us, us.</h2>
+    </div>
+    <div class="reel rise" id="memory-reel"><!-- populated by JS --></div>
+    <div class="reel-hint rise">swipe to see them all →</div>
+    <button class="btn rise" data-next>Keep going</button>
+  </section>
+
+  <!-- SCREEN 4 — THE LOVE LETTER -->
+  <section class="screen" id="s4">
+    <div class="eyebrow rise">special delivery</div>
+    <h2 class="rise">A little something for you.</h2>
+    <div class="envelope-wrap rise">
+      <div class="envelope" id="envelope">
+        <div class="letter-paper">
+          <div class="letter-peek">to my favourite person&hellip;</div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-body"></div>
+        <div class="seal">&hearts;</div>
+      </div>
+    </div>
+    <div class="tap-hint rise">tap the envelope to open it</div>
+    <div class="full-letter" id="full-letter">
+      <p id="letter-text"><!-- filled by JS --></p>
+      <div class="sign" id="letter-sign"><!-- filled by JS --></div>
+    </div>
+    <button class="btn rise" data-next id="letter-continue" style="display:none;">Continue →</button>
+  </section>
+
+  <!-- SCREEN 5 — THE FINAL REVEAL -->
+  <section class="screen" id="s5">
+    <div class="eyebrow reveal-eyebrow rise">and so&hellip;</div>
+    <h2 class="reveal-title rise">Happy Anniversary,<br><span class="name" id="reveal-name">Sarah</span></h2>
+    <p class="lede rise">Here's to every chapter we've written, and every chapter still waiting for us.</p>
+    <button class="btn rise" data-next>One more thing… 👀</button>
+  </section>
+
+  <!-- SCREEN 6 — FINAL SURPRISE -->
+  <section class="screen" id="s6">
+    <div class="eyebrow rise">last thing, promise</div>
+    <h2 class="rise">Our song, for the road ahead.</h2>
+    <div class="note-strip rise">
+      <div class="track">
+        <div class="disc"></div>
+        <div class="track-meta">
+          <div class="t1" id="song-title">Until I Found You</div>
+          <div class="t2" id="song-sub">add your Spotify link here</div>
+        </div>
+      </div>
+    </div>
+    <div class="final-mini rise" id="mini-photos"><!-- populated by JS --></div>
+    <p class="lede rise">Thank you for being my favourite person, in every version of this story.</p>
+    <div class="made-with rise hand" id="made-with-line">— <span id="author-tag">John</span></div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+
+  /* ============================================================
+     EDIT ME — swap in your own story. Nothing below this block
+     needs to change unless you want to tweak the mechanics.
+     ============================================================ */
+  const STORY = {
+    partnerName: "Sarah",
+    authorName: "John",
+    anniversaryDate: "2024-09-05", // YYYY-MM-DD — the day it all began
+    memories: [
+      { emoji:"☕", tag:"chapter one", caption:"the tiny café where we talked for four hours", colorA:"#f0d9c0", colorB:"#d9a066" },
+      { emoji:"🌧️", tag:"chapter two", caption:"the rainy night we didn't want to say goodnight", colorA:"#c9d6e3", colorB:"#8fa6bd" },
+      { emoji:"🌇", tag:"chapter three", caption:"that sunset drive with no destination", colorA:"#f6c6a0", colorB:"#e08a6b" },
+      { emoji:"🏠", tag:"chapter four", caption:"the day it started feeling like home", colorA:"#e3c9d6", colorB:"#b98fa6" },
+      { emoji:"🌙", tag:"chapter five", caption:"every 2 a.m. call that never felt too late", colorA:"#cdd3e8", colorB:"#8b95c4" }
+    ],
+    letter: "I don't think I ever told you this properly, so here it is, in writing: you make ordinary days feel like something worth remembering. Every little place we've been, every late call, every quiet Tuesday — it's all part of a story I'd choose again without hesitating. Here's to us, and everything we haven't written yet.",
+    song: { title:"Until I Found You", note:"paste your Spotify or YouTube link here" }
+  };
+
+  // ---- wire the config into the DOM ----
+  document.getElementById('reveal-name').textContent = STORY.partnerName;
+  document.getElementById('author-tag').textContent = STORY.authorName;
+  document.getElementById('letter-text').textContent = STORY.letter;
+  document.getElementById('letter-sign').textContent = "— " + STORY.authorName;
+  document.getElementById('song-title').textContent = STORY.song.title;
+  document.getElementById('song-sub').textContent = STORY.song.note;
+
+  const reel = document.getElementById('memory-reel');
+  const mini = document.getElementById('mini-photos');
+  STORY.memories.forEach(m=>{
+    const card = document.createElement('div');
+    card.className = 'polaroid';
+    card.innerHTML = `
+      <div class="polaroid-photo" style="--photo-a:${m.colorA}; --photo-b:${m.colorB};">${m.emoji}</div>
+      <div class="polaroid-tag">${m.tag}</div>
+      <div class="polaroid-cap">${m.caption}</div>
+    `;
+    reel.appendChild(card);
+
+    const dot = document.createElement('div');
+    dot.className = 'mini-photo';
+    dot.style.setProperty('--photo-a', m.colorA);
+    dot.style.setProperty('--photo-b', m.colorB);
+    mini.appendChild(dot);
+  });
+
+  // days-together counter
+  const start = new Date(STORY.anniversaryDate);
+  const today = new Date();
+  const days = Math.max(0, Math.round((today - start) / 86400000));
+  const counter = document.getElementById('days-count');
+  let shown = 0;
+  const step = Math.max(1, Math.round(days / 60));
+  function tick(){
+    shown = Math.min(days, shown + step);
+    counter.textContent = shown.toLocaleString();
+    if(shown < days) requestAnimationFrame(()=>setTimeout(tick, 12));
+  }
+
+  // ---- screen navigation ----
+  const screens = Array.from(document.querySelectorAll('.screen'));
+  const dots = Array.from(document.querySelectorAll('#dots button'));
+  const fill = document.getElementById('progress-fill');
+  let current = 1;
+
+  function goTo(n){
+    if(n < 1 || n > screens.length) return;
+    screens[current-1].classList.remove('active');
+    current = n;
+    screens[current-1].classList.add('active');
+    dots.forEach((d,i)=> d.classList.toggle('active', i === current-1));
+    fill.style.width = (current/screens.length*100) + '%';
+    if(current === 2) tick();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  document.querySelectorAll('[data-next]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(current+1));
+  });
+  dots.forEach(d=> d.addEventListener('click', ()=> goTo(parseInt(d.dataset.goto))));
+
+  // ---- envelope open interaction ----
+  const envelope = document.getElementById('envelope');
+  const fullLetter = document.getElementById('full-letter');
+  const letterContinue = document.getElementById('letter-continue');
+  let opened = false;
+  envelope.addEventListener('click', ()=>{
+    if(opened) return;
+    opened = true;
+    envelope.classList.add('open');
+    setTimeout(()=>{
+      fullLetter.classList.add('show');
+      letterContinue.style.display = 'inline-block';
+    }, 500);
+  });
+
+})();
+</script>
+</body>
+</html>
